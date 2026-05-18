@@ -58,7 +58,7 @@ function Contact() {
                     GitHub
                 </a>
 
-                {/* LinkedIn Link (Brave Shield Proof!) */}
+                {/* LinkedIn Link*/}
                 <a
                     href="https://www.linkedin.com/in/muhammad-yousuf-qureshi-/"
                     target="_blank"

@@ -32,7 +32,7 @@ function App() {
       overflow: 'hidden'
     }}>
 
-      {/* 🌟 UPGRADE 1: Mouse-Tracking Interactive Glow Orb */}
+      {/* Mouse-Tracking Interactive Glow Orb */}
       <div style={{
         position: 'fixed',
         width: '500px',

@@ -20,7 +20,7 @@ function Skills() {
     ];
 
     return (
-        /* 🌟 UPGRADE 3a: Combined layout classes for reveal */
+        /*Combined layout classes for reveal */
         <section
             ref={sectionRef}
             className={`reveal-section ${isVisible ? 'visible' : ''}`}

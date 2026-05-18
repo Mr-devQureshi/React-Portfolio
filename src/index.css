@@ -114,7 +114,7 @@ code {
   background: var(--code-bg);
 }
 
-/* 1. Entrance Animation Keyframes */
+/*Entrance Animation Keyframes */
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -131,7 +131,7 @@ code {
   animation: fadeInUp 0.8s ease-out forwards;
 }
 
-/* 2. Interactive Card Hover Effects */
+/*Interactive Card Hover Effects */
 .project-card {
   transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease !important;
 }
@@ -142,7 +142,7 @@ code {
   box-shadow: 0 10px 20px rgba(100, 108, 255, 0.15);
 }
 
-/* 3. Button Pulse Glow Effect */
+/*Button Pulse Glow Effect */
 .glow-button {
   transition: transform 0.2s ease, box-shadow 0.2s ease !important;
 }
@@ -152,15 +152,15 @@ code {
   box-shadow: 0 0 15px rgba(100, 108, 255, 0.6);
 }
 
-/* 1. Shifting Gradient Text Effect */
-/* 1. Shifting Gradient Text Effect */
+/*Shifting Gradient Text Effect */
+/*Shifting Gradient Text Effect */
 .gradient-text {
   background: linear-gradient(to right, #646cff, #ff64b4, #42d3ff, #646cff);
   background-size: 300% auto;
   background-clip: text;
-  /* ✨ Add this standard property */
+
   -webkit-background-clip: text;
-  /* Keep this vendor prefix */
+
   -webkit-text-fill-color: transparent;
   animation: textShine 6s linear infinite;
 }
@@ -175,7 +175,7 @@ code {
   }
 }
 
-/* 2. Floating Ambient Neon Orbs */
+/*Floating Ambient Neon Orbs */
 .orb {
   position: absolute;
   width: 400px;
@@ -184,7 +184,7 @@ code {
   filter: blur(100px);
   opacity: 0.12;
   pointer-events: none;
-  /* Keeps orbs from blocking clicks on buttons */
+
   z-index: 0;
   animation: floatAround 15s infinite alternate ease-in-out;
 }
@@ -200,7 +200,7 @@ code {
   top: 40%;
   right: -10%;
   animation-delay: -7s;
-  /* Staggers the start time */
+
 }
 
 @keyframes floatAround {
@@ -257,7 +257,7 @@ code {
   /* Pivots the hand right at the wrist */
 }
 
-/* 1. Typewriter Cursor Blinking Effect */
+/*Typewriter Cursor Blinking Effect */
 .cursor {
   display: inline-block;
   width: 3px;
@@ -278,7 +278,7 @@ code {
   }
 }
 
-/* 2. Scroll Reveal Transition Classes */
+/*Scroll Reveal Transition Classes */
 .reveal-section {
   opacity: 0;
   transform: translateY(40px);

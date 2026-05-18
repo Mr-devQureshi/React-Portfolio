@@ -13,7 +13,7 @@ function Projects({ sectionRef }) {
         return () => observer.disconnect();
     }, []);
 
-    // Merge our scroll-to pointer and our reveal pointer using a callback ref
+    // Merge scroll-to pointer and reveal pointer using a callback ref
     const setRefs = (node) => {
         internalRef.current = node;
         if (sectionRef) sectionRef.current = node;
@@ -31,7 +31,7 @@ function Projects({ sectionRef }) {
     ];
 
     return (
-        /* 🌟 UPGRADE 3b: Blended target reveals */
+        /*Blended target reveals */
         <section
             ref={setRefs}
             className={`reveal-section ${isVisible ? 'visible' : ''}`}

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
 function Hero({ onButtonClick }) {
-    // Phrases to loop through
     const words = [
         "Building clean frontend interfaces.",
         "Designing reliable database structures.",
@@ -18,23 +17,23 @@ function Hero({ onButtonClick }) {
 
         const handleTyping = () => {
             if (!isDeleting) {
-                // Typing letters out
+
                 setSubText(activePhrase.substring(0, subText.length + 1));
                 setTypingSpeed(70);
 
                 if (subText === activePhrase) {
-                    // Pause at the end of the full sentence before deleting
+
                     setTypingSpeed(2000);
                     setIsDeleting(true);
                 }
             } else {
-                // Deleting letters back
+
                 setSubText(activePhrase.substring(0, subText.length - 1));
                 setTypingSpeed(40);
 
                 if (subText === "") {
                     setIsDeleting(false);
-                    setCurrentWordIdx((prev) => (prev + 1) % words.length); // Next word
+                    setCurrentWordIdx((prev) => (prev + 1) % words.length);
                     setTypingSpeed(500);
                 }
             }
@@ -60,7 +59,7 @@ function Hero({ onButtonClick }) {
                 <span className="gradient-text">Hello,My name is Yousuf</span> <span className="waving-hand">👋</span>
             </h1>
 
-            {/* 🌟 UPGRADE 2: Live Typewriter Subtitle */}
+            {/*Live Typewriter Subtitle */}
             <p style={{ fontSize: '1.3rem', color: '#cccccc', minHeight: '40px', maxWidth: '650px', margin: '0 auto 2.5rem auto', lineHeight: '1.6' }}>
                 I'm learning to specialize in <br />
                 <span style={{ color: '#646cff', fontWeight: 'bold' }}>{subText}</span>
