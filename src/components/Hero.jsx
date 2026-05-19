@@ -4,7 +4,9 @@ function Hero({ onButtonClick }) {
     const words = [
         "Building clean frontend interfaces.",
         "Designing reliable database structures.",
-        "Solving complex engineering problems."
+        "Solving complex engineering problems.",
+        "Scalability of a Software.",
+        ""
     ];
 
     const [currentWordIdx, setCurrentWordIdx] = useState(0);
@@ -55,11 +57,17 @@ function Hero({ onButtonClick }) {
             fontFamily: 'sans-serif',
             border: '1px solid rgba(255, 255, 255, 0.05)'
         }}>
-            <h1 style={{ fontSize: '3rem', marginBottom: '1.5rem', fontWeight: '800', color: '#ffffff' }}>
-                <span className="gradient-text">Hello,My name is Yousuf</span> <span className="waving-hand">👋</span>
+            <h1 style={{
+                fontSize: '3rem',
+                marginBottom: '1.5rem',
+                fontWeight: '800',
+                color: '#ffffff',
+                lineHeight: '1.4'
+            }}>
+                <span className="gradient-text">Hello! My name is Yousuf, a Junior Software Engineer</span>
+                <span className="waving-hand" style={{ display: 'inline-block', marginLeft: '12px' }}>👋</span>
             </h1>
 
-            {/*Live Typewriter Subtitle */}
             <p style={{ fontSize: '1.3rem', color: '#cccccc', minHeight: '40px', maxWidth: '650px', margin: '0 auto 2.5rem auto', lineHeight: '1.6' }}>
                 I'm learning to specialize in <br />
                 <span style={{ color: '#646cff', fontWeight: 'bold' }}>{subText}</span>

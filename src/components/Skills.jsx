@@ -14,8 +14,8 @@ function Skills() {
     }, []);
 
     const skillCategories = [
-        { title: "Languages", skills: ["JavaScript", "HTML/CSS", "Python", "SQL", "C", "C++", ".NET"] },
-        { title: "Frameworks & Tools", skills: ["React.js", "Vite", "VS Code", "Git / GitHub", "ARC GIS", "Remote Sensing"] },
+        { title: "Languages", skills: ["JavaScript", "HTML/CSS", "Python", "SQL", "C", "C++", ".NET", "BOOTSTRAP", "ShellScripting"] },
+        { title: "Frameworks & Tools", skills: ["React.js", "Vite", "VS Code", "Git / GitHub", "ARC GIS", "Remote Sensing", "Fast API", "Power BI", "Cisco", "Ubuntu"] },
         { title: "Databases & Systems", skills: ["MySQL", "PostgreSQL", "SQL Server / SSMS", "Docker"] }
     ];
 
