@@ -153,7 +153,7 @@ code {
 }
 
 /*Shifting Gradient Text Effect */
-/*Shifting Gradient Text Effect */
+
 .gradient-text {
   background: linear-gradient(to right, #646cff, #ff64b4, #42d3ff, #646cff);
   background-size: 300% auto;

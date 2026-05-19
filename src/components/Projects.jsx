@@ -28,7 +28,7 @@ function Projects({ sectionRef }) {
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
 
                 {myProjects.map((project) => (
-                    /* The Link wrapper makes the whole card clickable! */
+
                     <Link to={`/project/${project.id}`} key={project.id} style={{ textDecoration: 'none' }}>
                         <div className="project-card" style={{ backgroundColor: '#1a1a1a', color: '#ffffff', padding: '1.5rem', borderRadius: '8px', border: '1px solid #333', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '100%' }}>
                             <div>

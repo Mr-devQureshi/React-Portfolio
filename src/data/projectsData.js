@@ -5,7 +5,7 @@ export const myProjects = [
         description: "Designed and implemented a resilient ring network topology, configuring Cisco router CLI settings for optimized packet routing.",
         details: "Here is where you can write a massive, 3-paragraph case study about how you built this, the challenges you faced, and the solutions you engineered.",
         tags: ["Networking", "CLI", "Cisco"],
-        // 🌟 Fixed: Plural 'images' and properly formatted array
+
         images: [
             "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?q=80&w=1000&auto=format&fit=crop",
             "/images/Network/1.jpg",
@@ -20,7 +20,7 @@ export const myProjects = [
         description: "Designed a secure relational database schema utilizing SQL Server and SSMS, focusing on advanced query optimization and normalization.",
         details: "Detailed breakdown of your SQL schema, primary key relationships, and query optimization techniques.",
         tags: ["SQL Server", "SSMS", "Databases"],
-        // 🌟 Fixed: Plural 'images' and wrapped the single string in an array [ ]
+
         images: [
             "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1000&auto=format&fit=crop"
         ]

@@ -14,7 +14,7 @@ function ProjectDetail() {
 
     if (!project) return <h2 style={{ color: 'white', textAlign: 'center', marginTop: '5rem' }}>Project not found!</h2>;
 
-    // 🌟 The Array Split: Grab the first image for the Hero, and the rest for the Grid
+
     const heroImage = project.images && project.images.length > 0 ? project.images[0] : null;
     const galleryImages = project.images && project.images.length > 1 ? project.images.slice(1) : [];
 
@@ -28,16 +28,16 @@ function ProjectDetail() {
             </div>
 
 
-            {/* 🌟 THE NEW HERO BANNER (Top Image) 🌟 */}
+
             {heroImage && (
                 <div style={{
                     width: '100%',
-                    height: '540px', /* 🌟 The Frame: Dictates the exact height safely */
+                    height: '540px',
                     marginBottom: '2.5rem',
                     borderRadius: '12px',
                     border: '1px solid #333',
                     backgroundColor: '#1e1e1e',
-                    overflow: 'hidden' /* 🌟 The Magic: Chops off anything that spills out of the frame */
+                    overflow: 'hidden'
                 }}>
                     <img
                         src={heroImage}
@@ -46,8 +46,8 @@ function ProjectDetail() {
                         style={{
                             display: 'block',
                             width: '100%',
-                            height: '100%', /* 🌟 Tells the image to fill the frame perfectly */
-                            objectFit: 'cover', /* 🌟 Now this is guaranteed to crop instead of squish! */
+                            height: '100%',
+                            objectFit: 'cover',
                             objectPosition: 'center',
                             cursor: 'zoom-in',
                             transition: 'transform 0.2s ease-in-out'
@@ -70,7 +70,7 @@ function ProjectDetail() {
                 ))}
             </div>
 
-            {/* 🌟 THE GALLERY GRID (Only remaining images) 🌟 */}
+
             {galleryImages.length > 0 && (
                 <div style={{
                     display: 'grid',
@@ -107,7 +107,7 @@ function ProjectDetail() {
                 {project.details}
             </p>
 
-            {/* 🌟 THE LIGHTBOX PORTAL 🌟 */}
+            {/*  THE LIGHTBOX PORTAL  */}
             {selectedImage && createPortal(
                 <div
                     onClick={() => setSelectedImage(null)}
