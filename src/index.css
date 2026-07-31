@@ -1,23 +1,47 @@
 :root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+  /* 🌟 Carlos Personal Portfolio Theme (Dark by default) 🌟 */
+  --bg: #08080D;
+  /* Deep dark background */
+  --code-bg: #12121A;
+  /* A slightly lighter card/secondary background */
+  --text-h: #BCBABC;
+  /* Light grey heading color */
+  --text: #9DA9CE;
+  /* Cool grey-blue paragraph text */
+  --border: #2e303a;
+  /* Muted borders and dividing lines */
 
+  --accent: #F86D09;
+  /* The vibrant orange pop accent */
+  --accent-secondary: #EFA649;
+  /* Soft yellow-orange (great for gradients) */
+
+  /* Semi-transparent variations for special effects and borders */
+  --accent-bg: rgba(248, 109, 9, 0.1);
+  --accent-border: rgba(248, 109, 9, 0.5);
+  --social-bg: rgba(47, 48, 58, 0.5);
+
+  /* Deeper shadow for the dark theme */
+  --shadow:
+    rgba(0, 0, 0, 0.6) 0 10px 15px -3px, rgba(0, 0, 0, 0.4) 0 4px 6px -2px;
+
+  /* 🌟 Component Alias Variables (Maps React to the Carlos Theme) 🌟 */
+  --bg-secondary: var(--code-bg);
+  --accent-color: var(--accent);
+  --text-primary: var(--text-h);
+  --text-secondary: var(--text);
+
+  /* Typographic Settings */
   --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
   --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
   --mono: ui-monospace, Consolas, monospace;
+  /* 🌟 Custom ease required for the complex entrance logic */
+  --ease: cubic-bezier(0.6, 0.01, -0.05, 0.9);
 
   font: 18px/145% var(--sans);
   letter-spacing: 0.18px;
-  color-scheme: light dark;
+  color-scheme: dark;
+  /* Force the browser to treat this as dark by default */
   color: var(--text);
   background: var(--bg);
   font-synthesis: none;
@@ -31,20 +55,8 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
-  }
 
+  /* Keeping the inverted icon filter for social icons */
   #social .button-icon {
     filter: invert(1) brightness(2);
   }
@@ -114,7 +126,7 @@ code {
   background: var(--code-bg);
 }
 
-/*Entrance Animation Keyframes */
+/* Entrance Animation Keyframes */
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -131,36 +143,35 @@ code {
   animation: fadeInUp 0.8s ease-out forwards;
 }
 
-/*Interactive Card Hover Effects */
+/* Interactive Card Hover Effects */
 .project-card {
   transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease !important;
 }
 
 .project-card:hover {
   transform: translateY(-6px);
-  border-color: #646cff !important;
-  box-shadow: 0 10px 20px rgba(100, 108, 255, 0.15);
+  border-color: var(--accent) !important;
+  box-shadow: 0 10px 20px rgba(248, 109, 9, 0.15);
+  /* Orange shadow */
 }
 
-/*Button Pulse Glow Effect */
+/* Button Pulse Glow Effect */
 .glow-button {
   transition: transform 0.2s ease, box-shadow 0.2s ease !important;
 }
 
 .glow-button:hover {
   transform: scale(1.05);
-  box-shadow: 0 0 15px rgba(100, 108, 255, 0.6);
+  box-shadow: 0 0 15px rgba(248, 109, 9, 0.6);
+  /* Orange glow */
 }
 
-/*Shifting Gradient Text Effect */
-
+/* Shifting Gradient Text Effect */
 .gradient-text {
-  background: linear-gradient(to right, #646cff, #ff64b4, #42d3ff, #646cff);
+  background: linear-gradient(to right, var(--accent), var(--accent-secondary), var(--accent));
   background-size: 300% auto;
   background-clip: text;
-
   -webkit-background-clip: text;
-
   -webkit-text-fill-color: transparent;
   animation: textShine 6s linear infinite;
 }
@@ -175,7 +186,7 @@ code {
   }
 }
 
-/*Floating Ambient Neon Orbs */
+/* Floating Ambient Neon Orbs */
 .orb {
   position: absolute;
   width: 400px;
@@ -184,23 +195,23 @@ code {
   filter: blur(100px);
   opacity: 0.12;
   pointer-events: none;
-
   z-index: 0;
   animation: floatAround 15s infinite alternate ease-in-out;
 }
 
 .orb-purple {
-  background: #646cff;
+  background: var(--accent);
+  /* Swapped to orange */
   top: 5%;
   left: -10%;
 }
 
 .orb-pink {
-  background: #ff64b4;
+  background: var(--accent-secondary);
+  /* Swapped to secondary yellow-orange */
   top: 40%;
   right: -10%;
   animation-delay: -7s;
-
 }
 
 @keyframes floatAround {
@@ -223,7 +234,6 @@ code {
     transform: rotate(14.0deg)
   }
 
-  /* The wave */
   20% {
     transform: rotate(-8.0deg)
   }
@@ -244,7 +254,6 @@ code {
     transform: rotate(0.0deg)
   }
 
-  /* Return to rest */
   100% {
     transform: rotate(0.0deg)
   }
@@ -254,14 +263,14 @@ code {
   display: inline-block;
   animation: wave-animation 2.5s infinite;
   transform-origin: 70% 70%;
-  /* Pivots the hand right at the wrist */
 }
 
-/*Typewriter Cursor Blinking Effect */
+/* Typewriter Cursor Blinking Effect */
 .cursor {
   display: inline-block;
   width: 3px;
-  background-color: #646cff;
+  background-color: var(--accent);
+  /* Swapped to orange */
   margin-left: 4px;
   animation: blink 0.8s infinite;
 }
@@ -278,7 +287,7 @@ code {
   }
 }
 
-/*Scroll Reveal Transition Classes */
+/* Scroll Reveal Transition Classes */
 .reveal-section {
   opacity: 0;
   transform: translateY(40px);
@@ -288,4 +297,13 @@ code {
 .reveal-section.visible {
   opacity: 1;
   transform: translateY(0);
+}
+
+/* 🌟 The Mouse Glow Center Fix 🌟 */
+.mouse-glow {
+  position: fixed;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  /* This perfectly centers the glow to your cursor */
+  z-index: 9999;
 }

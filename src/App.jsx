@@ -1,66 +1,124 @@
-import React, { useRef, useState, useEffect } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import React, { useState, useRef, useEffect, useLayoutEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
+import Lenis from 'lenis';
 
-// Import our sections
 import Hero from './components/Hero';
 import Skills from './components/Skills';
 import Projects from './components/Projects';
 import Contact from './components/Contact';
-
-// Import our new page
 import ProjectDetail from './pages/ProjectDetail';
+import Loader from './components/Loader';
 
-// We bundle the main page into a single component so the router can render it cleanly
-function HomePage() {
+// 🌟 Synchronous Layout-Effect Scroll Manager (No delays, zero visual flash)
+function ScrollManager({ lenisRef }) {
+  const location = useLocation();
+
+  useLayoutEffect(() => {
+    if (location.pathname.startsWith('/project/')) {
+      window.scrollTo(0, 0);
+      if (lenisRef.current) {
+        lenisRef.current.scrollTo(0, { immediate: true });
+      }
+    } else if (location.pathname === '/') {
+      const savedScroll = sessionStorage.getItem('portfolioGalleryScroll');
+      if (savedScroll) {
+        const targetPos = parseInt(savedScroll, 10);
+
+        if (lenisRef.current) {
+          lenisRef.current.resize();
+          lenisRef.current.scrollTo(targetPos, { immediate: true });
+        }
+        window.scrollTo(0, targetPos);
+        sessionStorage.removeItem('portfolioGalleryScroll');
+      }
+    }
+  }, [location, lenisRef]);
+
+  return null;
+}
+
+function App() {
   const projectsRef = useRef(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const lenisRef = useRef(null);
 
   const scrollToProjects = () => {
     projectsRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  return (
-    <div style={{ position: 'relative', zIndex: 1 }}>
-      <Hero onButtonClick={scrollToProjects} />
-      <Skills />
-      <Projects sectionRef={projectsRef} />
-      <Contact />
-    </div>
-  );
-}
-
-// The Main App Engine
-function App() {
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-
   useEffect(() => {
-    const handleMouseMove = (event) => setMousePos({ x: event.clientX, y: event.clientY });
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
+    const masterTimer = setTimeout(() => {
+      setIsLoading(false);
+    }, 2800);
+
+    return () => clearTimeout(masterTimer);
   }, []);
 
+  useEffect(() => {
+    try {
+      const lenis = new Lenis({
+        duration: 1.2,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        smoothWheel: true,
+      });
+
+      lenisRef.current = lenis;
+      window.lenis = lenis;
+
+      function raf(time) {
+        lenis.raf(time);
+        requestAnimationFrame(raf);
+      }
+      requestAnimationFrame(raf);
+
+      if (isLoading) {
+        lenis.stop();
+      } else {
+        lenis.start();
+      }
+
+      return () => {
+        lenis.destroy();
+        lenisRef.current = null;
+        window.lenis = null;
+      };
+    } catch (e) {
+      console.warn("Lenis initialization skipped:", e);
+    }
+  }, [isLoading]);
+
   return (
-    <BrowserRouter>
-      <div style={{ backgroundColor: '#0f0f0f', minHeight: '100vh', position: 'relative', overflow: 'hidden' }}>
-
-        {/* The Mouse Tracking Glow Orb lives outside the routes so it works everywhere! */}
-        <div style={{
-          position: 'fixed',
-          width: '500px', height: '500px', borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(100,108,255,0.15) 0%, rgba(255,100,180,0.05) 50%, transparent 100%)',
-          filter: 'blur(60px)', pointerEvents: 'none', zIndex: 0, transition: 'transform 0.1s ease-out',
-          transform: `translate(${mousePos.x - 250}px, ${mousePos.y - 250}px)`
-        }}></div>
-
-        {/* 🌟 The Routing Engine Traffic Cop 🌟 */}
-        <div style={{ position: 'relative', zIndex: 1 }}>
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/project/:id" element={<ProjectDetail />} />
-          </Routes>
-        </div>
-
+    <Router>
+      <ScrollManager lenisRef={lenisRef} />
+      <div className="App" style={{ backgroundColor: 'var(--bg)', minHeight: '100vh', color: 'var(--text-h)', fontFamily: 'var(--sans)' }}>
+        <AnimatePresence mode="wait">
+          {isLoading ? (
+            <Loader key="loader" />
+          ) : (
+            <motion.main
+              key="main"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+              style={{ display: 'flex', flexDirection: 'column' }}
+            >
+              <Routes>
+                <Route path="/" element={
+                  <>
+                    <Hero onButtonClick={scrollToProjects} />
+                    <Skills />
+                    <Projects sectionRef={projectsRef} />
+                    <Contact />
+                  </>
+                } />
+                <Route path="/project/:id" element={<ProjectDetail />} />
+              </Routes>
+            </motion.main>
+          )}
+        </AnimatePresence>
       </div>
-    </BrowserRouter>
+    </Router>
   );
 }
 

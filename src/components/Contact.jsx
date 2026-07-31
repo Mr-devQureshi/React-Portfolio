@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'framer-motion'; /* 🌟 1. Imported the animation engine */
 
 function Contact() {
     const myGmail = "myousufqureshi.6689@gmail.com";
@@ -7,76 +8,111 @@ function Contact() {
         display: 'flex',
         alignItems: 'center',
         gap: '0.6rem',
-        color: '#646cff',
+        color: 'var(--text-primary)',
         textDecoration: 'none',
         fontWeight: 'bold',
-        transition: 'transform 0.2s ease'
+        padding: '0.8rem 1.5rem',
+        backgroundColor: 'var(--bg-secondary)',
+        borderRadius: '8px',
+        border: '1px solid #333',
+        transition: 'all 0.3s ease',
+        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+    };
+
+    /* 🌟 2. The Animation Blueprints */
+    const containerVariants = {
+        hidden: { opacity: 0, y: 30 },
+        show: {
+            opacity: 1,
+            y: 0,
+            transition: {
+                duration: 0.8,
+                ease: "easeOut",
+                staggerChildren: 0.15,
+                delayChildren: 0.2
+            }
+        }
+    };
+
+    const itemVariants = {
+        hidden: { opacity: 0, y: 20 },
+        show: { opacity: 1, y: 0, transition: { duration: 0.5 } }
     };
 
     return (
-        <footer style={{
-            padding: '4rem 2rem',
-            textAlign: 'center',
-            backgroundColor: '#1a1a1a',
-            color: '#ffffff',
-            borderTop: '1px solid #333',
-            marginTop: '4rem',
-            fontFamily: 'sans-serif'
-        }}>
-            <h2 style={{ marginBottom: '1rem' }}>Get In Touch</h2>
-            <p style={{ color: '#cccccc', maxWidth: '500px', margin: '0 auto 2rem auto', lineHeight: '1.6' }}>
-                I'm always looking to connect with other developers, work on interesting projects, or discuss software engineering opportunities.
-            </p>
+        /* 🌟 3. Wrap the footer in a motion element */
+        <motion.footer
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, amount: 0.3 }}
+            style={{
+                padding: '5rem 2rem',
+                textAlign: 'center',
+                backgroundColor: 'var(--bg-secondary)', /* Using your premium color scheme */
+                color: 'var(--text-primary)',
+                borderTop: '1px solid #222',
+                marginTop: '5rem',
+                fontFamily: 'sans-serif'
+            }}
+        >
+            <motion.h2 variants={itemVariants} className="gradient-text" style={{ marginBottom: '1.5rem', fontSize: '2.5rem' }}>
+                Let's Build Something
+            </motion.h2>
 
-            <div style={{ display: 'flex', justifyContent: 'center', gap: '2.5rem', flexWrap: 'wrap' }}>
+            <motion.p variants={itemVariants} style={{ color: 'var(--text-secondary)', maxWidth: '550px', margin: '0 auto 3rem auto', lineHeight: '1.7', fontSize: '1.1rem' }}>
+                I'm always looking to connect with other developers, work on interesting projects, or discuss software engineering opportunities. My inbox is always open!
+            </motion.p>
 
-                {/* Gmail Link */}
-                <a
+            <motion.div style={{ display: 'flex', justifyContent: 'center', gap: '1.5rem', flexWrap: 'wrap' }}>
+
+                <motion.a
+                    variants={itemVariants}
+                    whileHover={{ y: -5, borderColor: 'var(--accent-color)', backgroundColor: '#222' }}
                     href={`https://mail.google.com/mail/?view=cm&fs=1&to=${myGmail}`}
                     target="_blank"
                     rel="noreferrer"
                     style={linkStyle}
-                    className="glow-button"
                 >
-                    <svg role="img" viewBox="0 0 24 24" style={{ width: '20px', height: '20px', fill: '#646cff' }}>
+                    <svg role="img" viewBox="0 0 24 24" style={{ width: '20px', height: '20px', fill: 'var(--accent-color)' }}>
                         <path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-1.298 1.458-2.052 2.512-1.26L12 11.248l9.488-7.051C22.541 3.405 24 4.159 24 5.457z" />
                     </svg>
                     Gmail
-                </a>
+                </motion.a>
 
-                {/* GitHub Link */}
-                <a
+                <motion.a
+                    variants={itemVariants}
+                    whileHover={{ y: -5, borderColor: 'var(--accent-color)', backgroundColor: '#222' }}
                     href="https://github.com/Mr-devQureshi"
                     target="_blank"
                     rel="noreferrer"
                     style={linkStyle}
-                    className="glow-button"
                 >
-                    <svg role="img" viewBox="0 0 24 24" style={{ width: '20px', height: '20px', fill: '#646cff' }}>
+                    <svg role="img" viewBox="0 0 24 24" style={{ width: '20px', height: '20px', fill: 'var(--accent-color)' }}>
                         <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
                     </svg>
                     GitHub
-                </a>
+                </motion.a>
 
-                {/* LinkedIn Link*/}
-                <a
+                <motion.a
+                    variants={itemVariants}
+                    whileHover={{ y: -5, borderColor: 'var(--accent-color)', backgroundColor: '#222' }}
                     href="https://www.linkedin.com/in/muhammad-yousuf-qureshi-/"
                     target="_blank"
                     rel="noreferrer"
                     style={linkStyle}
-                    className="glow-button"
                 >
-                    <svg role="img" viewBox="0 0 24 24" style={{ width: '20px', height: '20px', fill: '#646cff' }}>
+                    <svg role="img" viewBox="0 0 24 24" style={{ width: '20px', height: '20px', fill: 'var(--accent-color)' }}>
                         <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
                     </svg>
                     LinkedIn
-                </a>
-            </div>
+                </motion.a>
+            </motion.div>
 
-            <p style={{ color: '#666666', fontSize: '0.85rem', marginTop: '3rem' }}>
-                © {new Date().getFullYear()} By Me. Powered by React & Vite.
-            </p>
-        </footer>
+            <motion.p variants={itemVariants} style={{ color: '#555', fontSize: '0.9rem', marginTop: '4rem' }}>
+
+            </motion.p>
+        </motion.footer>
     );
 }
 
