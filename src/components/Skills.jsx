@@ -1,205 +1,231 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
-// 🌟 Reusable Component for the Orbiting Skill Nodes
-const OrbitNode = ({ skill, angle, radius, duration, color }) => {
-    return (
-        <motion.div
-            style={{
-                position: 'absolute',
-                top: '50%',
-                left: '50%',
-                width: 0,
-                height: 0,
-                zIndex: 2,
-            }}
-            // 1. Rotates the invisible wrapper in a massive circle
-            animate={{ rotate: [angle, angle + 360] }}
-            transition={{ duration, repeat: Infinity, ease: "linear" }}
-        >
-            {/* 2. Pushes the item out to its specific orbit radius */}
-            <div style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                transform: `translate(${radius}px, 0px)`
-            }}>
-                {/* 3. Counter-rotates the badge so the text stays perfectly horizontal */}
-                <motion.div
-                    animate={{ rotate: [-angle, -(angle + 360)] }}
-                    transition={{ duration, repeat: Infinity, ease: "linear" }}
-                    style={{
-                        position: 'absolute',
-                        x: '-50%',
-                        y: '-50%',
-                        transformOrigin: 'center center',
-                    }}
-                >
-                    <div style={{
-                        backgroundColor: 'rgba(18, 18, 26, 0.8)',
-                        backdropFilter: 'blur(8px)',
-                        border: '1px solid rgba(46, 48, 58, 0.6)',
-                        color: 'var(--text-h)',
-                        padding: '0.6rem 1.2rem',
-                        borderRadius: '30px',
-                        whiteSpace: 'nowrap',
-                        fontSize: '0.85rem',
-                        fontWeight: '600',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '8px',
-                        boxShadow: '0 4px 15px rgba(0,0,0,0.3)',
-                        cursor: 'default'
-                    }}>
-                        {/* The glowing active-node indicator */}
-                        <span style={{
-                            width: 8,
-                            height: 8,
-                            borderRadius: '50%',
-                            backgroundColor: color,
-                            boxShadow: `0 0 10px ${color}`
-                        }} />
-                        {skill}
-                    </div>
-                </motion.div>
-            </div>
-        </motion.div>
-    );
-};
+// 🌟 THE MASTER POOL (Updated with your exact stack)
+const ALL_TOOLS = [
+    // Languages
+    { name: "JavaScript", color: "#F86D09" },
+    { name: "Java", color: "#6366f1" },
+    { name: "HTML5/CSS3", color: "#F86D09" },
+    { name: "SQL", color: "#6366f1" },
+    { name: "C/C++", color: "#F86D09" },
+    { name: "Python", color: "#6366f1" },
+    { name: ".NET MVC", color: "#F86D09" },
+    { name: "Shell Scripting", color: "#6366f1" },
+
+    // Frameworks & Libraries
+    { name: "React.js", color: "#F86D09" },
+    { name: "Bootstrap", color: "#6366f1" },
+    { name: "FastAPI", color: "#F86D09" },
+    { name: "Power BI", color: "#6366f1" },
+    { name: "Cisco", color: "#F86D09" },
+    { name: "Ubuntu", color: "#6366f1" },
+
+    // DevOps & Automation
+    { name: "Docker", color: "#F86D09" },
+    { name: "Jenkins", color: "#6366f1" },
+    { name: "Git", color: "#F86D09" },
+    { name: "GitHub", color: "#6366f1" },
+    { name: "Playwright", color: "#F86D09" },
+    { name: "WSL", color: "#6366f1" },
+
+    // Developer Tools
+    { name: "VS Code", color: "#F86D09" },
+    { name: "SSMS", color: "#6366f1" },
+    { name: "IntelliJ", color: "#F86D09" },
+    { name: "Jupyter", color: "#6366f1" },
+    { name: "ArcGIS", color: "#F86D09" }
+];
+
+const ORBIT_CONFIG = [
+    { id: 1, size: 320, duration: 35, direction: 1, slots: 3 },
+    { id: 2, size: 520, duration: 45, direction: -1, slots: 4 },
+    { id: 3, size: 720, duration: 60, direction: 1, slots: 5 }
+];
+
+function getInitialState() {
+    let toolIndex = 0;
+    const activeSlots = [];
+
+    ORBIT_CONFIG.forEach(orbit => {
+        for (let i = 0; i < orbit.slots; i++) {
+            activeSlots.push({
+                orbitId: orbit.id,
+                slotIndex: i,
+                angle: (360 / orbit.slots) * i,
+                tool: ALL_TOOLS[toolIndex++]
+            });
+        }
+    });
+
+    const reservePool = ALL_TOOLS.slice(toolIndex);
+    return { activeSlots, reservePool };
+}
 
 function Skills() {
-    // Distributing your skills across 3 orbital rings
-    const orbitalRings = [
-        {
-            radius: 150,
-            duration: 35, // Inner ring spins fastest
-            color: 'var(--accent)', // Vibrant Orange
-            skills: ["MySQL", "PostgreSQL", "Docker", "C", "C++", "SQL Server"]
-        },
-        {
-            radius: 270,
-            duration: 50,
-            color: 'var(--accent-secondary)', // Yellow-Orange
-            skills: ["JavaScript", "HTML/CSS", "Python", "SQL", ".NET", "ShellScripting"]
-        },
-        {
-            radius: 400,
-            duration: 75, // Outer ring spins slowest
-            color: '#9DA9CE', // Cool grey-blue
-            skills: ["React.js", "Vite", "VS Code", "Git / GitHub", "BOOTSTRAP", "ARC GIS", "Remote Sensing", "Fast API", "Power BI", "Cisco", "Ubuntu"]
-        }
-    ];
+    const [state, setState] = useState(getInitialState);
+
+    // HOT-SWAP ENGINE
+    useEffect(() => {
+        const swapInterval = setInterval(() => {
+            setState(prev => {
+                if (prev.reservePool.length === 0) return prev;
+
+                const newSlots = [...prev.activeSlots];
+                const newPool = [...prev.reservePool];
+
+                const slotToSwapIdx = Math.floor(Math.random() * newSlots.length);
+                const toolFromPoolIdx = Math.floor(Math.random() * newPool.length);
+
+                const oldTool = newSlots[slotToSwapIdx].tool;
+                const newTool = newPool[toolFromPoolIdx];
+
+                newSlots[slotToSwapIdx] = { ...newSlots[slotToSwapIdx], tool: newTool };
+                newPool[toolFromPoolIdx] = oldTool;
+
+                return { activeSlots: newSlots, reservePool: newPool };
+            });
+        }, 2500);
+
+        return () => clearInterval(swapInterval);
+    }, []);
 
     return (
-        <section style={{ padding: '6rem 0', fontFamily: 'sans-serif', width: '100%', overflow: 'hidden', backgroundColor: 'var(--bg)', position: 'relative' }}>
+        <section style={{ backgroundColor: 'var(--bg)', position: 'relative', overflow: 'hidden', padding: '6rem 0', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
 
-            {/* The Header Area - Styled to match the Blockaid reference */}
-            <div style={{ textAlign: 'center', marginBottom: '2rem', position: 'relative', zIndex: 10 }}>
-                <p style={{ color: 'var(--accent)', fontSize: '0.85rem', fontWeight: 'bold', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '1rem' }}>
+            <style>
+                {`
+          @keyframes spinCw {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+          @keyframes spinCcw {
+            0% { transform: rotate(360deg); }
+            100% { transform: rotate(0deg); }
+          }
+          .gpu-accelerated {
+            backface-visibility: hidden;
+            transform: translateZ(0);
+            will-change: transform;
+          }
+        `}
+            </style>
+
+            {/* HEADER SECTION */}
+            <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 0.8 }}
+                style={{ textAlign: 'center', zIndex: 10, position: 'relative', marginBottom: '4rem' }}
+            >
+                <p style={{ color: 'var(--accent)', fontWeight: 'bold', letterSpacing: '2px', fontSize: '0.9rem', textTransform: 'uppercase', marginBottom: '1rem' }}>
                     Integrations & Tooling
                 </p>
-                <h2 style={{ fontSize: '3rem', marginBottom: '1rem', letterSpacing: '-1px', color: 'var(--text-h)', maxWidth: '800px', margin: '0 auto' }}>
+                <h2 style={{ color: 'var(--text-h)', fontSize: '3.5rem', fontWeight: '600', lineHeight: '1.2', marginBottom: '1.5rem', maxWidth: '800px', margin: '0 auto' }}>
                     Built on a robust network of modern technologies
                 </h2>
-                <p style={{ color: 'var(--text)', fontSize: '1.1rem', maxWidth: '600px', margin: '1rem auto 0 auto', lineHeight: '1.6' }}>
+                <p style={{ color: 'var(--text)', fontSize: '1.2rem', maxWidth: '600px', margin: '0 auto' }}>
                     Architecting scalable frontend interfaces, secure databases, and continuous delivery pipelines.
                 </p>
-            </div>
+            </motion.div>
 
-            {/* The Orbital System Wrapper */}
-            <div style={{
-                position: 'relative',
-                width: '100%',
-                height: '900px',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                marginTop: '1rem'
-            }}>
+            {/* SOLAR SYSTEM CONTAINER */}
+            <div style={{ position: 'relative', width: '100%', height: '800px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+
+                {/* THE CORE */}
                 <div style={{
-                    position: 'relative',
-                    width: '900px',
-                    height: '900px',
-                    flexShrink: 0
+                    position: 'absolute',
+                    width: '80px',
+                    height: '80px',
+                    backgroundColor: '#12121A',
+                    border: '2px solid var(--accent)',
+                    borderRadius: '16px',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    zIndex: 50,
+                    boxShadow: '0 0 40px rgba(248, 109, 9, 0.2)'
                 }}>
-
-                    {/* The Background Radial Glow (Matches the red/orange center glow) */}
-                    <div style={{
-                        position: 'absolute',
-                        top: '50%',
-                        left: '50%',
-                        transform: 'translate(-50%, -50%)',
-                        width: '700px',
-                        height: '700px',
-                        background: 'radial-gradient(circle, rgba(248, 109, 9, 0.12) 0%, rgba(248, 109, 9, 0) 60%)',
-                        zIndex: 0,
-                        pointerEvents: 'none'
-                    }} />
-
-                    {/* The Central CPU / Core Graphic */}
-                    <div style={{
-                        position: 'absolute',
-                        top: '50%',
-                        left: '50%',
-                        transform: 'translate(-50%, -50%)',
-                        zIndex: 10
-                    }}>
-                        <div style={{
-                            width: '90px',
-                            height: '90px',
-                            backgroundColor: '#08080D',
-                            border: '2px solid var(--accent)',
-                            borderRadius: '20px',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            boxShadow: '0 0 40px rgba(248, 109, 9, 0.4), inset 0 0 20px rgba(248, 109, 9, 0.3)',
-                            position: 'relative'
-                        }}>
-                            <svg width="45" height="45" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="1.5">
-                                <rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect>
-                                <path d="M9 9h6v6H9z"></path>
-                                <path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 14h3M1 9h3M1 14h3"></path>
-                            </svg>
-                        </div>
-                    </div>
-
-                    {/* Drawing the dashed rings and mapping the orbiting nodes */}
-                    {orbitalRings.map((ring, ringIdx) => (
-                        <div key={`ring-container-${ringIdx}`}>
-
-                            {/* The physical dashed circle */}
-                            <div style={{
-                                position: 'absolute',
-                                top: '50%',
-                                left: '50%',
-                                transform: 'translate(-50%, -50%)',
-                                width: `${ring.radius * 2}px`,
-                                height: `${ring.radius * 2}px`,
-                                borderRadius: '50%',
-                                border: '1px dashed var(--border)',
-                                opacity: 0.6,
-                                zIndex: 0
-                            }} />
-
-                            {/* The skills orbiting on this specific ring */}
-                            {ring.skills.map((skill, skillIdx) => {
-                                const angle = (360 / ring.skills.length) * skillIdx;
-                                return (
-                                    <OrbitNode
-                                        key={skillIdx}
-                                        skill={skill}
-                                        angle={angle}
-                                        radius={ring.radius}
-                                        duration={ring.duration}
-                                        color={ring.color}
-                                    />
-                                );
-                            })}
-                        </div>
-                    ))}
-
+                    <span style={{ color: 'var(--accent)', fontSize: '1.5rem', fontWeight: 'bold' }}>&lt;/&gt;</span>
                 </div>
+
+                {/* ORBITS RENDERER */}
+                {ORBIT_CONFIG.map((orbit) => {
+                    const spinAnimation = orbit.direction === 1 ? 'spinCw' : 'spinCcw';
+                    const counterSpinAnimation = orbit.direction === 1 ? 'spinCcw' : 'spinCw';
+
+                    const activeOrbitSlots = state.activeSlots.filter(s => s.orbitId === orbit.id);
+
+                    return (
+                        <div
+                            key={orbit.id}
+                            className="gpu-accelerated"
+                            style={{
+                                position: 'absolute',
+                                width: `${orbit.size}px`,
+                                height: `${orbit.size}px`,
+                                border: '1px dashed rgba(255, 255, 255, 0.1)',
+                                borderRadius: '50%',
+                                animation: `${spinAnimation} ${orbit.duration}s linear infinite`,
+                            }}
+                        >
+                            {activeOrbitSlots.map((slot) => (
+                                <div
+                                    key={slot.slotIndex}
+                                    style={{
+                                        position: 'absolute',
+                                        top: '50%',
+                                        left: '50%',
+                                        transform: `translate(-50%, -50%) rotate(${slot.angle}deg) translateY(-${orbit.size / 2}px)`,
+                                    }}
+                                >
+                                    <div className="gpu-accelerated" style={{ animation: `${counterSpinAnimation} ${orbit.duration}s linear infinite` }}>
+                                        <div style={{ transform: `rotate(-${slot.angle}deg)` }}>
+
+                                            <AnimatePresence mode="wait">
+                                                <motion.div
+                                                    key={slot.tool.name}
+                                                    initial={{ opacity: 0, scale: 0.5 }}
+                                                    animate={{ opacity: 1, scale: 1 }}
+                                                    exit={{ opacity: 0, scale: 0.5 }}
+                                                    transition={{ duration: 0.4 }}
+                                                    style={{
+                                                        backgroundColor: '#1a1a24',
+                                                        border: '1px solid #2a2a35',
+                                                        borderRadius: '9999px',
+                                                        padding: '0.6rem 1.2rem',
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        gap: '0.6rem',
+                                                        whiteSpace: 'nowrap',
+                                                        boxShadow: '0 10px 30px -10px rgba(0,0,0,0.5)',
+                                                        transition: 'border-color 0.3s ease',
+                                                        cursor: 'default'
+                                                    }}
+                                                    onMouseOver={(e) => e.currentTarget.style.borderColor = slot.tool.color}
+                                                    onMouseOut={(e) => e.currentTarget.style.borderColor = '#2a2a35'}
+                                                >
+                                                    <span style={{
+                                                        width: '8px',
+                                                        height: '8px',
+                                                        borderRadius: '50%',
+                                                        backgroundColor: slot.tool.color,
+                                                        boxShadow: `0 0 10px ${slot.tool.color}`
+                                                    }} />
+                                                    <span style={{ color: '#e2e8f0', fontSize: '0.9rem', fontWeight: '500' }}>
+                                                        {slot.tool.name}
+                                                    </span>
+                                                </motion.div>
+                                            </AnimatePresence>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    );
+                })}
             </div>
         </section>
     );

@@ -19,16 +19,19 @@ const ScrubCard = ({ project, index, progress, total }) => {
     const unpackedX = index * stepDistance;
     const maxScroll = (total - 1) * stepDistance;
 
+    // 🌟 ELONGATED ANIMATION TIMELINE: 
+    // Stretched from [0.05, 0.15, 1] to [0.05, 0.35, 1]. 
+    // This triples the scroll distance required for the cards to unpack and flip open!
     const x = useTransform(
         progress,
-        [0.05, 0.15, 1],
+        [0.05, 0.35, 1],
         [0, unpackedX, unpackedX - maxScroll]
     );
 
-    const y = useTransform(progress, [0.05, 0.15, 1], [250, 0, 0]);
-    const scale = useTransform(progress, [0.05, 0.15, 1], [0.4, 1, 1]);
-    const rotateY = useTransform(progress, [0.05, 0.15, 1], [180, 0, 0]);
-    const rotateZ = useTransform(progress, [0.05, 0.15, 1], [messyAngle, 0, 0]);
+    const y = useTransform(progress, [0.05, 0.35, 1], [250, 0, 0]);
+    const scale = useTransform(progress, [0.05, 0.35, 1], [0.4, 1, 1]);
+    const rotateY = useTransform(progress, [0.05, 0.35, 1], [180, 0, 0]);
+    const rotateZ = useTransform(progress, [0.05, 0.35, 1], [messyAngle, 0, 0]);
 
     const zIndex = 100 - index;
 
@@ -50,7 +53,6 @@ const ScrubCard = ({ project, index, progress, total }) => {
             <Link
                 to={`/project/${project.id}`}
                 onClick={() => {
-                    // 🌟 Grab the exact virtual scroll position from Lenis instead of lagging window.scrollY
                     const currentScroll = window.lenis ? window.lenis.scroll : window.scrollY;
                     sessionStorage.setItem('portfolioGalleryScroll', currentScroll.toString());
                 }}
@@ -160,7 +162,8 @@ function Projects({ sectionRef }) {
         offset: ["start start", "end end"]
     });
 
-    const dynamicTrackHeight = Math.max(400, myProjects.length * 60);
+    // 🌟 Increased height multiplier from 60vh to 85vh per project to give the elongated animation plenty of breathing room
+    const dynamicTrackHeight = Math.max(500, myProjects.length * 85);
 
     const headerOpacity = useTransform(scrollYProgress, [0, 0.03, 1], [1, 0, 0]);
     const headerY = useTransform(scrollYProgress, [0, 0.03, 1], [0, -50, -50]);
@@ -195,7 +198,9 @@ function Projects({ sectionRef }) {
                         <h2 style={{ color: 'var(--accent)', fontSize: '3rem', marginBottom: '1rem', fontWeight: '500', letterSpacing: '-1px' }}>
                             Featured Projects
                         </h2>
-
+                        <p style={{ color: 'var(--text)', fontSize: '1.15rem' }}>
+                            Scroll to unpack infrastructure.
+                        </p>
                     </motion.div>
 
                     <div style={{
