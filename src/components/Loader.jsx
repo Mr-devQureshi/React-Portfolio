@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 
 function Loader() {
-    const greeting = "Hi!, Welcome to my Portfolio :)";
+    const greeting = "git commit 'Transforming ideas into code' ";
     const words = greeting.split(" ");
 
     const containerVariants = {
@@ -55,7 +55,7 @@ function Loader() {
                         style={{
                             fontSize: '3.5rem',
                             fontWeight: '700',
-                            color: word.includes('Portfolio') ? 'var(--accent)' : 'var(--text-h)',
+                            color: word.includes('git') ? 'var(--accent)' : 'var(--text-h)',
                             letterSpacing: '-1px'
                         }}
                     >
