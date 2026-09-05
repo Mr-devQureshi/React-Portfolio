@@ -1,14 +1,13 @@
 import { useState, useRef, useEffect, useLayoutEffect, Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
 import Lenis from 'lenis';
 
 import Hero from './components/Hero';
-import Skills from './components/Skills';
-import Projects from './components/Projects';
-import Contact from './components/Contact';
 import Loader from './components/Loader';
 
+const Skills = lazy(() => import('./components/Skills'));
+const Projects = lazy(() => import('./components/Projects'));
+const Contact = lazy(() => import('./components/Contact'));
 const ProjectDetail = lazy(() => import('./pages/ProjectDetail'));
 
 // 🌟 Synchronous Layout-Effect Scroll Manager (No delays, zero visual flash)
@@ -51,6 +50,7 @@ function ScrollManager({ lenisRef }) {
 function App() {
   const projectsRef = useRef(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isLeaving, setIsLeaving] = useState(false);
   const lenisRef = useRef(null);
 
   const scrollToProjects = () => {
@@ -62,11 +62,16 @@ function App() {
   };
 
   useEffect(() => {
-    const masterTimer = setTimeout(() => {
-      setIsLoading(false);
-    }, 1800);
+    // Phase 1 (1600ms): loader words finish their entrance, then trigger the
+    // slide-up exit which is purely CSS (kept out of the framer-motion path).
+    const exitTimer = setTimeout(() => setIsLeaving(true), 1600);
+    // Phase 2 (800ms later): exit transition completes, reveal the page.
+    const revealTimer = setTimeout(() => setIsLoading(false), 2400);
 
-    return () => clearTimeout(masterTimer);
+    return () => {
+      clearTimeout(exitTimer);
+      clearTimeout(revealTimer);
+    };
   }, []);
 
   useEffect(() => {
@@ -105,33 +110,25 @@ function App() {
     <Router>
       <ScrollManager lenisRef={lenisRef} />
       <div className="App" style={{ backgroundColor: 'var(--bg)', minHeight: '100vh', color: 'var(--text-h)', fontFamily: 'var(--sans)' }}>
-        <AnimatePresence mode="wait">
-          {isLoading ? (
-            <Loader key="loader" />
-          ) : (
-            <motion.main
-              key="main"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, ease: "easeOut" }}
-              style={{ display: 'flex', flexDirection: 'column' }}
-            >
-              <Suspense fallback={null}>
-                <Routes>
-                  <Route path="/" element={
-                    <>
-                      <Hero onButtonClick={scrollToProjects} />
-                      <Skills />
-                      <Projects sectionRef={projectsRef} />
-                      <Contact />
-                    </>
-                  } />
-                  <Route path="/project/:id" element={<ProjectDetail />} />
-                </Routes>
-              </Suspense>
-            </motion.main>
-          )}
-        </AnimatePresence>
+        {isLoading ? (
+          <Loader isLeaving={isLeaving} />
+        ) : (
+          <main style={{ display: 'flex', flexDirection: 'column' }}>
+            <Suspense fallback={null}>
+              <Routes>
+                <Route path="/" element={
+                  <>
+                    <Hero onButtonClick={scrollToProjects} />
+                    <Skills />
+                    <Projects sectionRef={projectsRef} />
+                    <Contact />
+                  </>
+                } />
+                <Route path="/project/:id" element={<ProjectDetail />} />
+              </Routes>
+            </Suspense>
+          </main>
+        )}
       </div>
     </Router>
   );

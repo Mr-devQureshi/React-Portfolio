@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion'; /* 🌟 1. Import Framer Motion */
 
 function Hero({ onButtonClick }) {
     const words = [
@@ -45,33 +44,14 @@ function Hero({ onButtonClick }) {
     }, [subText, isDeleting, currentWordIdx]);
 
 
-    /* 🌟 2. The Cinematic Entrance Blueprints */
-    const containerVariants = {
-        hidden: { opacity: 0 },
-        show: {
-            opacity: 1,
-            transition: {
-                staggerChildren: 0.3, /* Drops the elements in one by one */
-                delayChildren: 0.2  /* Waits a split second after page load to start */
-            }
-        }
-    };
-
-    const itemVariants = {
-        hidden: { opacity: 0, y: 30 },
-        show: {
-            opacity: 1,
-            y: 0,
-            transition: { duration: 0.8, ease: "easeOut" }
-        }
-    };
+    /* 🌟 2. The Cinematic Entrance — now plain CSS (no framer-motion in the
+       critical path). Nesting matches the old staggerChildren 0.3s /
+       delayChildren 0.2s timing exactly. */
 
     return (
         /* 🌟 3. The Animated Section Wrapper */
-        <motion.section
-            variants={containerVariants}
-            initial="hidden"
-            animate="show" /* Notice we use 'animate' instead of 'whileInView' so it plays immediately on load */
+        <section
+            className="hero-enter"
             style={{
                 padding: '10rem 2rem 8rem 2rem',
                 textAlign: 'center',
@@ -85,7 +65,7 @@ function Hero({ onButtonClick }) {
                 minHeight: '75vh'
             }}
         >
-            <motion.h1 variants={itemVariants} style={{
+            <h1 className="hero-enter-item" style={{
                 fontSize: '3.5rem',
                 marginBottom: '1.5rem',
                 fontWeight: '800',
@@ -95,9 +75,9 @@ function Hero({ onButtonClick }) {
                 <br /> {/* Breaking the title onto two lines feels more editorial and premium */}
                 <span style={{ color: 'var(--text-primary)' }}>a Junior Software Engineer</span>
                 <span className="waving-hand" style={{ display: 'inline-block', marginLeft: '12px' }}>👋</span>
-            </motion.h1>
+            </h1>
 
-            <motion.p variants={itemVariants} style={{
+            <p className="hero-enter-item" style={{
                 fontSize: '1.3rem',
                 color: 'var(--text-secondary)',
                 minHeight: '60px',
@@ -108,9 +88,9 @@ function Hero({ onButtonClick }) {
                 I'm learning to specialize in <br />
                 <span style={{ color: 'var(--accent-color)', fontWeight: 'bold' }}>{subText}</span>
                 <span className="cursor" style={{ opacity: isDeleting ? 0.4 : 1 }}>|</span>
-            </motion.p>
+            </p>
 
-            <motion.div variants={itemVariants}>
+            <div className="hero-enter-item">
                 <button onClick={onButtonClick} style={{
                     padding: '1rem 2.5rem',
                     fontSize: '1.1rem',
@@ -133,8 +113,8 @@ function Hero({ onButtonClick }) {
                     }}>
                     View My Projects
                 </button>
-            </motion.div>
-        </motion.section>
+            </div>
+        </section>
     );
 }
 
