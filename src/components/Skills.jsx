@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 // 🌟 THE MASTER POOL (Updated with your exact stack)
@@ -64,9 +64,26 @@ function getInitialState() {
 
 function Skills() {
     const [state, setState] = useState(getInitialState);
+    const [isVisible, setIsVisible] = useState(false);
+    const sectionRef = useRef(null);
 
-    // HOT-SWAP ENGINE
+    // Pause all orbit/hot-swap work when the section scrolls off-screen
     useEffect(() => {
+        const node = sectionRef.current;
+        if (!node) return;
+
+        const observer = new IntersectionObserver(
+            ([entry]) => setIsVisible(entry.isIntersecting),
+            { threshold: 0.1 }
+        );
+        observer.observe(node);
+        return () => observer.disconnect();
+    }, []);
+
+    // HOT-SWAP ENGINE (only while visible)
+    useEffect(() => {
+        if (!isVisible) return;
+
         const swapInterval = setInterval(() => {
             setState(prev => {
                 if (prev.reservePool.length === 0) return prev;
@@ -88,10 +105,12 @@ function Skills() {
         }, 2500);
 
         return () => clearInterval(swapInterval);
-    }, []);
+    }, [isVisible]);
+
+    const orbitStyle = (isVisible ? '' : 'paused') + ' gpu-accelerated';
 
     return (
-        <section style={{ backgroundColor: 'var(--bg)', position: 'relative', overflow: 'hidden', padding: '6rem 0', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <section ref={sectionRef} style={{ backgroundColor: 'var(--bg)', position: 'relative', overflow: 'hidden', padding: '6rem 0', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
 
             <style>
                 {`
@@ -107,6 +126,11 @@ function Skills() {
             backface-visibility: hidden;
             transform: translateZ(0);
             will-change: transform;
+          }
+          .gpu-accelerated.paused,
+          .gpu-accelerated.paused * {
+            animation-play-state: paused !important;
+            transition: none;
           }
         `}
             </style>
@@ -160,7 +184,7 @@ function Skills() {
                     return (
                         <div
                             key={orbit.id}
-                            className="gpu-accelerated"
+                            className={orbitStyle}
                             style={{
                                 position: 'absolute',
                                 width: `${orbit.size}px`,

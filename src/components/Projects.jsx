@@ -48,12 +48,15 @@ const ScrubCard = ({ project, index, progress, total }) => {
                 width: `${cardWidth}px`,
                 height: `${cardHeight}px`,
                 transformStyle: 'preserve-3d',
+                willChange: 'transform',
+                backfaceVisibility: 'hidden',
             }}
         >
             <Link
                 to={`/project/${project.id}`}
                 onClick={() => {
                     const currentScroll = window.lenis ? window.lenis.scroll : window.scrollY;
+                    console.log('[scroll-save] currentScroll =', currentScroll, 'scrollY =', window.scrollY);
                     sessionStorage.setItem('portfolioGalleryScroll', currentScroll.toString());
                 }}
                 style={{
@@ -172,7 +175,7 @@ function Projects({ sectionRef }) {
     return (
         <section ref={sectionRef} style={{ backgroundColor: 'var(--bg)', position: 'relative' }}>
 
-            <div ref={trackRef} style={{ height: `${dynamicTrackHeight}vh`, position: 'relative' }}>
+            <div ref={trackRef} style={{ height: `${dynamicTrackHeight}vh`, position: 'relative', contain: 'paint' }}>
 
                 <div style={{
                     position: 'sticky',
@@ -193,7 +196,8 @@ function Projects({ sectionRef }) {
                         opacity: headerOpacity,
                         y: headerY,
                         scale: headerScale,
-                        pointerEvents: 'none'
+                        pointerEvents: 'none',
+                        willChange: 'transform, opacity'
                     }}>
                         <h2 style={{ color: 'var(--accent)', fontSize: '3rem', marginBottom: '1rem', fontWeight: '500', letterSpacing: '-1px' }}>
                             Featured Projects

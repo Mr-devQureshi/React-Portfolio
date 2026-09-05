@@ -54,6 +54,9 @@ function ProjectDetail() {
                         src={heroImage}
                         alt={`${project.title} Hero Banner`}
                         onClick={() => setSelectedImage(heroImage)}
+                        loading="eager"
+                        fetchPriority="high"
+                        decoding="async"
                         whileHover={{ scale: 1.02 }}
                         style={{
                             display: 'block',
@@ -91,6 +94,8 @@ function ProjectDetail() {
                             key={index}
                             src={imgSrc}
                             alt={`${project.title} gallery screenshot ${index + 1}`}
+                            loading="lazy"
+                            decoding="async"
                             onClick={() => setSelectedImage(imgSrc)}
                             whileHover={{ scale: 1.03 }}
                             style={{
