@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { myProjects } from '../data/projectsData';
@@ -56,7 +56,6 @@ const ScrubCard = ({ project, index, progress, total }) => {
                 to={`/project/${project.id}`}
                 onClick={() => {
                     const currentScroll = window.lenis ? window.lenis.scroll : window.scrollY;
-                    console.log('[scroll-save] currentScroll =', currentScroll, 'scrollY =', window.scrollY);
                     sessionStorage.setItem('portfolioGalleryScroll', currentScroll.toString());
                 }}
                 style={{

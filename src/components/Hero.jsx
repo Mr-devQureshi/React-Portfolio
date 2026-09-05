@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion'; /* 🌟 1. Import Framer Motion */
 
 function Hero({ onButtonClick }) {

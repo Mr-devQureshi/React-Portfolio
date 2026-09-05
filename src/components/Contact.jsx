@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { motion } from 'framer-motion'; /* 🌟 1. Imported the animation engine */
 
 function Contact() {

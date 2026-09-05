@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useLayoutEffect, Suspense, lazy } from 'react';
+import { useState, useRef, useEffect, useLayoutEffect, Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import Lenis from 'lenis';
@@ -26,17 +26,20 @@ function ScrollManager({ lenisRef }) {
       if (savedScroll) {
         const targetPos = parseInt(savedScroll, 10);
 
-        console.log('[scroll-restore] targetPos =', targetPos, 'docHeight =', document.documentElement.scrollHeight, 'bodyHeight =', document.body.scrollHeight);
-
         // useLayoutEffect runs before paint, so restore synchronously here —
         // this paints the home page already at the project's position with no
-        // flicker or snap. The sticky track height is %vh (fixed immediately),
-        // so the document height is stable at this point.
+        // flicker or snap.
         if (lenisRef.current) {
+          // Lenis caches its scroll limit via a ResizeObserver that fires with
+          // a 250ms debounce. Returning from the (shorter) project page leaves
+          // that cache stale, so scrollTo() would clamp to the old page's
+          // height and desync Lenis from the real scroll — snapping the page
+          // back up on the next wheel input. Force a synchronous re-measure
+          // first so the clamp and internal state match the full home page.
+          lenisRef.current.resize();
           lenisRef.current.scrollTo(targetPos, { immediate: true });
         }
         window.scrollTo(0, targetPos);
-        console.log('[scroll-restore] after restore, scrollY =', window.scrollY, 'lenis =', lenisRef.current?.scroll);
         sessionStorage.removeItem('portfolioGalleryScroll');
       }
     }
